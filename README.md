@@ -79,8 +79,8 @@ x| POST   | /api/posts/:id/comments | Creates a comment for the post with the sp
 x| GET    | /api/posts              | Returns an array of all the post objects contained in the database.                                                                                                         |
 x| GET    | /api/posts/:id          | Returns the post object with the specified id.                                                                                                                              |
 x| GET    | /api/posts/:id/comments | Returns an array of all the comment objects associated with the post with the specified id.                                                                                 |
-| DELETE | /api/posts/:id          | Removes the post with the specified id and returns the **deleted post object**. You may need to make additional calls to the database in order to satisfy this requirement. |
-| PUT    | /api/posts/:id          | Updates the post with the specified `id` using data from the `request body`. Returns the modified document, **NOT the original**.                                           |
+x| DELETE | /api/posts/:id          | Removes the post with the specified id and returns the **deleted post object**. You may need to make additional calls to the database in order to satisfy this requirement. |
+x| PUT    | /api/posts/:id          | Updates the post with the specified `id` using data from the `request body`. Returns the modified document, **NOT the original**.                                           |
 
 #### Endpoint Specifications
 
