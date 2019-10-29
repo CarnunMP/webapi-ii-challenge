@@ -8,7 +8,6 @@ server.get('/', (req, res) => {
   res.json('Hello World!');
 });
 
-
 server.post('/api/posts', (req, res) => {
   const { title, contents } = req.body;
   if (!title || !contents) {
@@ -31,6 +30,46 @@ server.post('/api/posts', (req, res) => {
         });
       });
   }
+});
+
+server.post('/api/posts/:id/comments', (req, res) => {
+  const { id } = req.params;
+  const { text } = req.body;
+
+  db.findById(id)
+    .then((post) => {
+      if (Array.isArray(post) && post.length === 0) {
+        res.status(404).json({
+          success: false,
+          message: 'There is no post corresponding to the specified ID.',
+        });
+      } else {
+        const commentToPost = {
+          text,
+          post_id: id,
+        };
+
+        db.insertComment(commentToPost)
+          .then((data) => {
+            res.status(201).json({
+              success: true,
+              id: data.id,
+            });
+          })
+          .catch((err) => {
+            res.status(500).json({
+              success: false,
+              err,
+            });
+          });
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        err,
+      });
+    });
 });
 
 module.exports = server;
