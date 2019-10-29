@@ -112,4 +112,45 @@ server.get('/api/posts/:id', (req, res) => {
     });
 });
 
+server.get('/api/posts/:id/comments', (req, res) => {
+  const { id } = req.params;
+
+  db.findById(id)
+    .then((post) => {
+      if (Array.isArray(post) && post.length === 0) {
+        res.status(404).json({
+          success: false,
+          message: 'There is no post corresponding to the specified ID.',
+        });
+      } else {
+        db.findPostComments(id)
+          .then((comments) => {
+            if (comments.length === 0) {
+              res.status(404).json({
+                success: false,
+                message: 'There are no comments on this post.',
+              });
+            } else {
+              res.status(200).json({
+                success: true,
+                comments,
+              });
+            }
+          })
+          .catch((err) => {
+            res.status(500).json({
+              success: false,
+              err,
+            });
+          });
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        err,
+      });
+    });
+});
+
 module.exports = server;
