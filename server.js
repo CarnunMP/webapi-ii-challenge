@@ -153,4 +153,33 @@ server.get('/api/posts/:id/comments', (req, res) => {
     });
 });
 
+server.delete('/api/posts/:id', (req, res) => {
+  const { id } = req.params;
+
+  db.findById(id)
+    .then((post) => {
+      if (Array.isArray(post) && post.length === 0) {
+        res.status(404).json({
+          success: false,
+          message: 'There is no post corresponding to the specified ID.',
+        });
+      } else {
+        db.remove(id)
+          .then((count) => {
+            res.status(410).json({
+              success: true,
+              deletedPost: post[0],
+              count,
+            });
+          })
+          .catch((err) => {
+            res.status(500).json({
+              success: false,
+              err,
+            });
+          });
+      }
+    });
+});
+
 module.exports = server;
